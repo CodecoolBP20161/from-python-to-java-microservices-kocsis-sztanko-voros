@@ -29,7 +29,7 @@ public class UserDaoMem implements UserDao {
         DATA = new ArrayList<User>();
     }
 
-    public ArrayList<User> getDATA() {
+    public ArrayList<User> getAll() {
         return DATA;
     }
 
