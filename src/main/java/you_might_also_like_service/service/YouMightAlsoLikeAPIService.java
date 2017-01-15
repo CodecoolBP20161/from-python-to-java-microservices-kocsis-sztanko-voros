@@ -9,6 +9,8 @@ import you_might_also_like_service.model.User;
 
 import java.util.*;
 
+import static you_might_also_like_service.logging.LogFormatter.FORMAT;
+
 /* This class contains mainly the logic of YouMightAlsoLikeAPIService*/
 
 public class YouMightAlsoLikeAPIService {
@@ -30,22 +32,22 @@ public class YouMightAlsoLikeAPIService {
 
     public void saveUser(String accessToken, String userID, String item) {
         userDao.save(accessToken, userID, item);
-        logger.debug(">>>>> User with the following credentials saved: Access Token: {}, User ID: {}, Item: {}", accessToken, userID, item);
-        logger.info(">>>>> User saved");
+        logger.debug(FORMAT.getCustomizedFormatter() + "User with the following credentials saved: Access Token: {}, User ID: {}, Item: {}", accessToken, userID, item);
+        logger.info(FORMAT.getCustomizedFormatter() + "User saved");
     }
 
     public JSONObject getRecommendations(String accessToken, String userId) {
-        logger.info(">>>>> Recommendation requested");
+        logger.info(FORMAT.getCustomizedFormatter() + "Recommendation requested");
 
         JSONObject json;
         User specUser = userDao.find(accessToken, userId);
-        logger.debug(">>>>> SpecUser found: {}", userDao.find(accessToken, userId));
+        logger.debug(FORMAT.getCustomizedFormatter() + "SpecUser found: {}", userDao.find(accessToken, userId));
         ArrayList<User> allUsers = userDao.containsOneOfTheSpecItemsAtLeast(accessToken, userId);
-        logger.debug(">>>>> Users with carts containing specUser's items at leans once in their own pocket.");
+        logger.debug(FORMAT.getCustomizedFormatter() + "Users with carts containing specUser's items at leans once in their own pocket.");
         HashMap<String, Integer> uniqueItems = userDao.selectUniqueItems(specUser.getAccessToken(), specUser);
-        logger.debug(">>>>> Unique items selected in HashMap: {}", uniqueItems);
+        logger.debug(FORMAT.getCustomizedFormatter() + "Unique items selected in HashMap: {}", uniqueItems);
 
-        logger.info(">>>>> Calculation of recommendations just started.");
+        logger.info(FORMAT.getCustomizedFormatter() + "Calculation of recommendations just started.");
         for (User user : allUsers) {
             Integer power = -1;
             for (String item : user.getItems()) {
@@ -61,18 +63,18 @@ public class YouMightAlsoLikeAPIService {
         }
 
         Map<String, Integer> resultHM = new LinkedHashMap<>();
-        logger.debug(">>>>> Unsorted resultSet: {}", resultHM);
+        logger.debug(FORMAT.getCustomizedFormatter() + "Unsorted resultSet: {}", resultHM);
 
         uniqueItems.entrySet().stream()
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
                 .forEachOrdered(x -> resultHM.put(x.getKey(), x.getValue()));
-        logger.debug(">>>>> Sorted resultSet returned: {}", resultHM);
+        logger.debug(FORMAT.getCustomizedFormatter() + "Sorted resultSet returned: {}", resultHM);
 
         Set resultS = resultHM.keySet();
         Integer range = (resultS.size() < RECOMMENDATION_RANGE) ? resultS.size() : RECOMMENDATION_RANGE;
         json = new JSONObject().put("recommendations", new ArrayList<>(resultS).subList(0, range));
-        logger.debug(">>>>> Following JSON returned: {}", json);
-        logger.info(">>>>> Recommendation returned.");
+        logger.debug(FORMAT.getCustomizedFormatter() + "Following JSON returned: {}", json);
+        logger.info(FORMAT.getCustomizedFormatter() + "Recommendation returned.");
         return json;
     }
 }

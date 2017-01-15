@@ -6,6 +6,8 @@ import spark.Request;
 import spark.Response;
 import you_might_also_like_service.service.YouMightAlsoLikeAPIService;
 
+import static you_might_also_like_service.logging.LogFormatter.FORMAT;
+
 /* This class is responsible for handling data extracted from the URL. */
 
 public class YouMightAlsoLikeAPIController {
@@ -22,7 +24,7 @@ public class YouMightAlsoLikeAPIController {
     }
 
     public String status(Request request, Response response) {
-        logger.debug(">>>>> Status checked.");
+        logger.debug(FORMAT.getCustomizedFormatter() + "Status checked.");
         response.status(200);
         return "Server runs.";
     }
@@ -32,12 +34,12 @@ public class YouMightAlsoLikeAPIController {
         String userId = request.queryParams(USER_ID_PARAM_KEY);
         String cartItemId = request.queryParams(CART_ITEM_ID_PARAM_KEY);
         if (accessToken.isEmpty() || userId.isEmpty() || cartItemId.isEmpty()) {
-            logger.error(">>>>> One of the parameters extracted from URL (/save) is null during.");
+            logger.error(FORMAT.getCustomizedFormatter() + "One of the parameters extracted from URL (/save) is null during.");
             response.status(400);
-            return ">>>>> Missing parameter in URL, HTTP status error: " + response.status();
+            return FORMAT.getCustomizedFormatter() + "Missing parameter in URL, HTTP status error: " + response.status();
         }
         apiService.saveUser(accessToken, userId, cartItemId);
-        logger.debug(">>>>> Values extracted from URL accepted.");
+        logger.debug(FORMAT.getCustomizedFormatter() + "Values extracted from URL accepted.");
         response.status(200);
         return "Item successfully saved";
     }
@@ -46,12 +48,12 @@ public class YouMightAlsoLikeAPIController {
         String accessToken = request.queryParams(ACCESS_TOKEN_PARAM_KEY);
         String userId = request.queryParams(USER_ID_PARAM_KEY);
         if (accessToken.isEmpty() || userId.isEmpty()) {
-            logger.error(">>>>> One of the parameters extracted from URL (/select) is null.");
+            logger.error(FORMAT.getCustomizedFormatter() + "One of the parameters extracted from URL (/select) is null.");
             response.status(400);
             return "Missing parameter in URL, HTTP status error: " + response.status();
         }
         response.status(200);
-        logger.debug(">>>>> Values extracted from URL accepted.");
+        logger.debug(FORMAT.getCustomizedFormatter() + "Values extracted from URL accepted.");
         return apiService.getRecommendations(accessToken, userId).toString();
     }
 }
