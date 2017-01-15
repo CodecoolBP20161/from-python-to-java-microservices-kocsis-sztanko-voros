@@ -36,7 +36,7 @@ public class YouMightAlsoLikeAPIController {
         if (accessToken.isEmpty() || userId.isEmpty() || cartItemId.isEmpty()) {
             logger.error(FORMAT.getCustomizedFormatter() + "One of the parameters extracted from URL (/save) is null during.");
             response.status(400);
-            return FORMAT.getCustomizedFormatter() + "Missing parameter in URL, HTTP status error: " + response.status();
+            return "Missing parameter in URL, HTTP status error: " + response.status();
         }
         apiService.saveUser(accessToken, userId, cartItemId);
         logger.debug(FORMAT.getCustomizedFormatter() + "Values extracted from URL accepted.");
