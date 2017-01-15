@@ -4,6 +4,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import you_might_also_like_service.dao.UserDao;
+import you_might_also_like_service.model.User;
+
+import java.util.Arrays;
+import java.util.HashSet;
 
 import static org.junit.Assert.*;
 
@@ -12,6 +16,8 @@ public class UserDaoMemTest {
     String accessToken;
     String userID;
     String cartItemID;
+    User testUser;
+    HashSet<String> cart = new HashSet<>();
 
     @Before
     public void setUp() throws Exception {
@@ -27,7 +33,8 @@ public class UserDaoMemTest {
         accessToken = null;
         userID = null;
         cartItemID = null;
-
+        testUser = null;
+        cart = null;
     }
 
     @Test
@@ -36,19 +43,27 @@ public class UserDaoMemTest {
     }
 
     @Test
-    public void save() throws Exception {
+    public void testSave() throws Exception {
         userDao.save(accessToken, userID, cartItemID);
         assertEquals(1, userDao.getAll().size());
     }
 
     @Test
-    public void getDATA() throws Exception {
-
+    public void testGetAll() throws Exception {
+        assertEquals(0, userDao.getAll().size());
     }
 
     @Test
-    public void find() throws Exception {
+    public void testUserIsFound() throws Exception {
+        cart = new HashSet<>(Arrays.asList(cartItemID));
+        testUser = new User(accessToken, userID, cart);
+        userDao.save(accessToken, userID, cartItemID);
+        assertEquals(testUser.getUserID(), userDao.find(accessToken, userID).getUserID());
+    }
 
+    @Test
+    public void testUserIsNotFound() throws Exception {
+        assertEquals(null, userDao.find(accessToken, userID));
     }
 
     @Test
