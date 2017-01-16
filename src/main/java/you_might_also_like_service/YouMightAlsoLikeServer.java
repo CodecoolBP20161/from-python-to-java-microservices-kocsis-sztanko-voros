@@ -7,9 +7,8 @@ import you_might_also_like_service.service.YouMightAlsoLikeAPIService;
 
 import java.net.URISyntaxException;
 
-import static spark.Spark.exception;
-import static spark.Spark.port;
-import static spark.Spark.get;
+import static spark.Spark.*;
+import static you_might_also_like_service.logging.LogFormatter.FORMAT;
 
 /* Responsible for running the server of the MicroService */
 
@@ -19,7 +18,7 @@ public class YouMightAlsoLikeServer {
     private YouMightAlsoLikeAPIController controller;
 
     public static void main(String[] args) {
-        logger.debug(">>>>> Server started to run: {}", YouMightAlsoLikeServer.class.getName());
+        logger.debug(FORMAT.getCustomizedFormatter() + "Server started to run: {}", YouMightAlsoLikeServer.class.getName());
 
         YouMightAlsoLikeServer application = new YouMightAlsoLikeServer();
 
