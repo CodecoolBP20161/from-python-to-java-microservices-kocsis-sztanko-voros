@@ -70,7 +70,7 @@ public class UserDaoMem implements UserDao {
     public ArrayList<User> containsOneOfTheSpecItemsAtLeast(String accessToken, String userId) {
         logger.info(FORMAT.getCustomizedFormatter() + "Collecting all users, whose cart contains one of the specUser's items just started.");
 
-        ArrayList users = new ArrayList();
+        ArrayList users = new ArrayList<>();
         try {
             HashSet<String> items = find(accessToken, userId).getItems();
             for (User user : DATA) {
@@ -83,6 +83,7 @@ public class UserDaoMem implements UserDao {
             }
         } catch (NullPointerException e) {
             logger.warn(FORMAT.getCustomizedFormatter() + "No access token and user ID matched during searching in storage.");
+            return users;
         }
         logger.debug(FORMAT.getCustomizedFormatter() + "All users selected: {}", users);
         return users;
