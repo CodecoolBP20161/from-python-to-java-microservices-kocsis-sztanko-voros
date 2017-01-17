@@ -43,7 +43,11 @@ public class YouMightAlsoLikeAPIService {
         User specUser = userDao.find(accessToken, userId);
         logger.debug(FORMAT.getCustomizedFormatter() + "SpecUser found: {}", userDao.find(accessToken, userId));
         ArrayList<User> allUsers = userDao.containsOneOfTheSpecItemsAtLeast(accessToken, userId);
-        logger.debug(FORMAT.getCustomizedFormatter() + "Users with carts containing specUser's items at leans once in their own pocket.");
+        if (allUsers.size() == 0) {
+            json = new JSONObject().put("recommendations", allUsers);
+            return json;
+        }
+        logger.debug(FORMAT.getCustomizedFormatter() + "Users with carts containing specUser's items at leans once in their own pocket: {}", allUsers);
         HashMap<String, Integer> uniqueItems = userDao.selectUniqueItems(specUser.getAccessToken(), specUser);
         logger.debug(FORMAT.getCustomizedFormatter() + "Unique items selected in HashMap: {}", uniqueItems);
 
