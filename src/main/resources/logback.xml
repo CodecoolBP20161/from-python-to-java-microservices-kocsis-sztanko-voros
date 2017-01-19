@@ -1,13 +1,16 @@
 <configuration>
+
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <!-- encoders are assigned the type
              ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+        <filter class="you_might_also_like_service.logging.SampleFilter"/>
         <encoder>
             <pattern>%date{ISO8601} | %-5level | %logger:%line - %msg%n</pattern>
         </encoder>
     </appender>
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <append>true</append>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- Daily rollover -->
             <fileNamePattern>log/%d{yyyy-MM-dd}.log</fileNamePattern>
@@ -15,12 +18,10 @@
             <!-- Keep 7 days' worth of history -->
             <maxHistory>7</maxHistory>
 
-            <append>true</append>
         </rollingPolicy>
-
         <encoder>
             <pattern>%date{ISO8601} [%-5level] %logger:%line - %msg%n</pattern>
-        </encoder>s
+        </encoder>
     </appender>
 
     <root level="debug">
